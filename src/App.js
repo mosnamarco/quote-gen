@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import './App.css'
+import { fetchData } from './lib/Quotes';
 
 function App() {
+  const [quote, setQuote] = useState();
+
+  useEffect(() => {
+    fetchData().then((res) => setQuote(res))
+  }, [])
+
+  const refetchData = () => {
+    fetchData().then((res) => setQuote(res))
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div className='app'>
+      <div className='group'>
+        <div className="container">
+          {quote ? (
+            <>
+              <p>{quote.quote}</p>
+              <span>- {quote.author}</span>
+            </>
+          ) : (
+            <p> Loading...</p>
+          )}
+        </div>
+        <button onClick={() => { refetchData() }}>Generate new quote</button>
+      </div>
+    </div >
   );
 }
 
